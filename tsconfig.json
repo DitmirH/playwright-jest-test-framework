@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    /* Target modern Node.js runtime */
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022"],
+
+    /* Strict type-checking for reliability */
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    /* Output settings */
+    "outDir": "./dist",
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "declaration": true,
+
+    /* Source maps for debugging */
+    "sourceMap": true
+  },
+  "include": ["tests/**/*.ts", "playwright.config.ts", "jest.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}
