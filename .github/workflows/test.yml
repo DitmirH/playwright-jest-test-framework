@@ -7,7 +7,35 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  api-tests:
+    name: API tests
+    runs-on: ubuntu-latest
+    environment: QA
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Run API tests
+        env:
+          REQRES_API_BASE_URL: ${{ secrets.REQRES_API_BASE_URL || 'https://reqres.in/api' }}
+          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+        run: npm run test:api
+
+      - name: Upload API report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-report
+          path: api-tests/reports/
+
+  ui-tests:
+    name: UI tests
     runs-on: ubuntu-latest
     environment: QA
     steps:
@@ -23,12 +51,6 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Run API tests
-        env:
-          REQRES_API_BASE_URL: ${{ secrets.REQRES_API_BASE_URL || 'https://reqres.in/api' }}
-          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
-        run: npm run test:api
-
       - name: Run UI tests
         env:
           UI_BASE_URL: ${{ secrets.UI_BASE_URL || 'https://www.saucedemo.com' }}
@@ -40,10 +62,3 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-
-      - name: Upload API test report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: api-report
-          path: api-tests/reports/
