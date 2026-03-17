@@ -1,6 +1,6 @@
 import type { Config } from "jest";
 
-/** Format date as dd-mm-yyyy-hh:mm:ss for report filenames */
+/** Format date as dd-mm-yyyy-hh-mm-ss for report filenames (no colons – invalid in artifact paths) */
 function reportTimestamp(): string {
   const d = new Date();
   const dd = String(d.getDate()).padStart(2, "0");
@@ -9,7 +9,7 @@ function reportTimestamp(): string {
   const hh = String(d.getHours()).padStart(2, "0");
   const min = String(d.getMinutes()).padStart(2, "0");
   const ss = String(d.getSeconds()).padStart(2, "0");
-  return `${dd}-${mm}-${yyyy}-${hh}:${min}:${ss}`;
+  return `${dd}-${mm}-${yyyy}-${hh}-${min}-${ss}`;
 }
 
 /**
